@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COZYGIFTZ - Profit/Loss Analysis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #7c5295;
+            --secondary-color: #f8e3ff;
+            --accent-color: #ff6b6b;
+            --dark-color: #2c2137;
+            --light-color: #ffffff;
+            --success-color: #4caf50;
+            --danger-color: #f44336;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f9f1ff;
+            color: var(--dark-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: var(--light-color);
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            margin-right: 1rem;
+        }
+
+        .logo h1 {
+            font-size: 2.5rem;
+            letter-spacing: 1px;
+        }
+
+        main {
+            max-width: 1200px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            flex: 1;
+        }
+
+        .charts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background-color: var(--light-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .chart-title {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-card {
+            background-color: var(--light-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .summary-value {
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 0.5rem 0;
+        }
+
+        .summary-value.profit {
+            color: var(--success-color);
+        }
+
+        .summary-value.loss {
+            color: var(--danger-color);
+        }
+
+        .summary-value.invest {
+            color: #2196f3;
+        }
+
+        .summary-label {
+            color: var(--dark-color);
+            font-size: 0.9rem;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .back-btn:hover {
+            background-color: #6a4580;
+            transform: translateY(-2px);
+        }
+
+        footer {
+            margin-top: auto;
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-container {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-gift"></i>
+            <h1>COZYGIFTZ</h1>
+        </div>
+    </header>
+
+    <main>
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back to Transactions
+        </a>
+
+        <div class="summary-cards">
+            <div class="summary-card">
+                <div class="summary-label">Total Gain</div>
+                <div class="summary-value profit" id="totalGain">₹0.00</div>
+                <div class="summary-label">Gain Percentage</div>
+                <div class="summary-value profit" id="gainPercentage">0%</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-label">Total Loss</div>
+                <div class="summary-value loss" id="totalLoss">₹0.00</div>
+                <div class="summary-label">Loss Percentage</div>
+                <div class="summary-value loss" id="lossPercentage">0%</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-label">Total Investment</div>
+                <div class="summary-value invest" id="totalInvest">₹0.00</div>
+                <div class="summary-label">Investment Percentage</div>
+                <div class="summary-value invest" id="investPercentage">0%</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-label">Net Balance</div>
+                <div class="summary-value" id="netBalance">₹0.00</div>
+                <div class="summary-label">Overall Performance</div>
+                <div class="summary-value" id="overallPerformance">0%</div>
+            </div>
+        </div>
+
+        <div class="charts-container">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">
+                        <i class="fas fa-chart-line"></i>
+                        Profit/Loss Trend
+                    </h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">
+                        <i class="fas fa-chart-pie"></i>
+                        Profit/Loss Distribution
+                    </h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="distributionChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 COZYGIFTZ. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get transactions from localStorage
+            const transactions = JSON.parse(localStorage.getItem('cozyGiftzTransactions')) || [];
+            
+            // Calculate totals
+            let totalGain = 0;
+            let totalLoss = 0;
+            let totalInvest = 0;
+            
+            transactions.forEach(transaction => {
+                if (transaction.type === 'gain') {
+                    totalGain += transaction.amount;
+                } else if (transaction.type === 'loss') {
+                    totalLoss += transaction.amount;
+                } else if (transaction.type === 'invest') {
+                    totalInvest += transaction.amount;
+                }
+            });
+
+            const netBalance = totalGain - totalLoss;
+            const totalTransactions = totalGain + totalLoss + totalInvest;
+            
+            // Calculate percentages
+            const gainPercentage = totalGain > 0 ? (totalGain / totalTransactions * 100).toFixed(1) : 0;
+            const lossPercentage = totalLoss > 0 ? (totalLoss / totalTransactions * 100).toFixed(1) : 0;
+            const investPercentage = totalInvest > 0 ? (totalInvest / totalTransactions * 100).toFixed(1) : 0;
+            const overallPerformance = totalTransactions > 0 ? (netBalance / totalTransactions * 100).toFixed(1) : 0;
+
+            // Update summary cards
+            document.getElementById('totalGain').textContent = `₹${totalGain.toFixed(2)}`;
+            document.getElementById('totalLoss').textContent = `₹${totalLoss.toFixed(2)}`;
+            document.getElementById('totalInvest').textContent = `₹${totalInvest.toFixed(2)}`;
+            document.getElementById('netBalance').textContent = `₹${netBalance.toFixed(2)}`;
+            document.getElementById('gainPercentage').textContent = `${gainPercentage}%`;
+            document.getElementById('lossPercentage').textContent = `${lossPercentage}%`;
+            document.getElementById('investPercentage').textContent = `${investPercentage}%`;
+            document.getElementById('overallPerformance').textContent = `${overallPerformance}%`;
+
+            // Prepare data for charts
+            const dates = [...new Set(transactions.map(t => t.date))].sort();
+            const dailyGain = new Array(dates.length).fill(0);
+            const dailyLoss = new Array(dates.length).fill(0);
+            const dailyInvest = new Array(dates.length).fill(0);
+
+            transactions.forEach(transaction => {
+                const dateIndex = dates.indexOf(transaction.date);
+                if (transaction.type === 'gain') {
+                    dailyGain[dateIndex] += transaction.amount;
+                } else if (transaction.type === 'loss') {
+                    dailyLoss[dateIndex] += transaction.amount;
+                } else if (transaction.type === 'invest') {
+                    dailyInvest[dateIndex] += transaction.amount;
+                }
+            });
+
+            // Trend Chart
+            new Chart(document.getElementById('trendChart'), {
+                type: 'line',
+                data: {
+                    labels: dates.map(date => new Date(date).toLocaleDateString()),
+                    datasets: [
+                        {
+                            label: 'Gain',
+                            data: dailyGain,
+                            borderColor: '#4caf50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            fill: true
+                        },
+                        {
+                            label: 'Loss',
+                            data: dailyLoss,
+                            borderColor: '#f44336',
+                            backgroundColor: 'rgba(244, 67, 54, 0.1)',
+                            fill: true
+                        },
+                        {
+                            label: 'Investment',
+                            data: dailyInvest,
+                            borderColor: '#2196f3',
+                            backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '₹' + value;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Distribution Chart
+            new Chart(document.getElementById('distributionChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Gain', 'Loss', 'Investment'],
+                    datasets: [{
+                        data: [totalGain, totalLoss, totalInvest],
+                        backgroundColor: ['#4caf50', '#f44336', '#2196f3'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

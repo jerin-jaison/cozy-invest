@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COZYGIFTZ - Transaction Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary-color: #7c5295;
+            --secondary-color: #f8e3ff;
+            --accent-color: #ff6b6b;
+            --dark-color: #2c2137;
+            --light-color: #ffffff;
+            --success-color: #4caf50;
+            --danger-color: #f44336;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9f1ff;
+            color: var(--dark-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: var(--light-color);
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        
+        .logo i {
+            font-size: 2.5rem;
+            margin-right: 1rem;
+        }
+        
+        .logo h1 {
+            font-size: 2.5rem;
+            letter-spacing: 1px;
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 300;
+        }
+        
+        main {
+            max-width: 900px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            flex: 1;
+        }
+        
+        .transaction-form {
+            background-color: var(--light-color);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .form-title {
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+        
+        .form-title i {
+            margin-right: 0.75rem;
+            font-size: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(124, 82, 149, 0.2);
+            outline: none;
+        }
+        
+        .amount-container {
+            position: relative;
+        }
+        
+        .amount-container span {
+            position: absolute;
+            left: 12px;
+            top: 12px;
+            font-weight: bold;
+        }
+        
+        .amount-container input {
+            padding-left: 28px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn:hover {
+            background-color: #6a4580;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(124, 82, 149, 0.3);
+        }
+        
+        .btn i {
+            margin-right: 8px;
+        }
+        
+        .btn-reset {
+            background-color: #e0e0e0;
+            color: #333;
+            margin-left: 1rem;
+        }
+        
+        .btn-reset:hover {
+            background-color: #d0d0d0;
+        }
+        
+        .transactions {
+            background-color: var(--light-color);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+        
+        .transactions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .transactions-title {
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            margin-right: auto;
+        }
+        
+        .transactions-title i {
+            margin-right: 0.75rem;
+            font-size: 1.5rem;
+        }
+        
+        .header-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background-color: var(--secondary-color);
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        tbody tr {
+            transition: all 0.3s ease;
+        }
+        
+        tbody tr:hover {
+            background-color: #f9f1ff;
+        }
+        
+        .amount {
+            font-weight: 600;
+        }
+        
+        .gain {
+            color: var(--success-color);
+        }
+        
+        .loss {
+            color: var(--danger-color);
+        }
+        
+        .transaction-type {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        
+        .type-gain {
+            background-color: rgba(76, 175, 80, 0.15);
+            color: var(--success-color);
+        }
+        
+        .type-loss {
+            background-color: rgba(244, 67, 54, 0.15);
+            color: var(--danger-color);
+        }
+        
+        .type-invest {
+            background-color: rgba(33, 150, 243, 0.15);
+            color: #2196f3;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #888;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ccc;
+        }
+        
+        footer {
+            margin-top: auto;
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            text-align: center;
+            padding: 1.5rem;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+        }
+        
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .notification i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .notification-success {
+            background-color: var(--success-color);
+        }
+        
+        .notification-error {
+            background-color: var(--danger-color);
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .transactions {
+                overflow-x: auto;
+            }
+            
+            .btn {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            
+            .btn-reset {
+                margin-left: 0;
+            }
+            
+            .transactions-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .transactions-title {
+                margin-bottom: 1rem;
+            }
+            
+            .header-buttons {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+            
+            .header-buttons .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.5s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .bounce-in {
+            animation: bounceIn 0.75s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+        }
+        
+        @keyframes bounceIn {
+            from, 20%, 40%, 60%, 80%, to {
+                animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+            }
+            0% {
+                opacity: 0;
+                transform: scale3d(0.3, 0.3, 0.3);
+            }
+            20% {
+                transform: scale3d(1.1, 1.1, 1.1);
+            }
+            40% {
+                transform: scale3d(0.9, 0.9, 0.9);
+            }
+            60% {
+                opacity: 1;
+                transform: scale3d(1.03, 1.03, 1.03);
+            }
+            80% {
+                transform: scale3d(0.97, 0.97, 0.97);
+            }
+            to {
+                opacity: 1;
+                transform: scale3d(1, 1, 1);
+            }
+        }
+        
+        .btn-icon {
+            background: none;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            margin: 0 4px;
+        }
+        
+        .btn-icon:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+            transform: scale(1.1);
+        }
+        
+        .edit-btn {
+            color: var(--primary-color);
+        }
+        
+        .delete-btn {
+            color: var(--danger-color);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            animation: bounceIn 0.5s;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-header h3 {
+            color: var(--primary-color);
+            margin: 0;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            padding: 0;
+        }
+        
+        .modal-footer {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+        
+        .view-all-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 0.9rem;
+            margin-right: 10px;
+        }
+        
+        .view-all-btn:hover {
+            background-color: #6a4580;
+            transform: translateY(-2px);
+        }
+        
+        .full-page-view {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            z-index: 2000;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        
+        .full-page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+        
+        .full-page-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--primary-color);
+        }
+        
+        .close-full-view {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark-color);
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .close-full-view:hover {
+            background-color: var(--secondary-color);
+            transform: rotate(90deg);
+        }
+        
+        .full-page-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .full-page-table th {
+            background-color: var(--secondary-color);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--primary-color);
+            position: sticky;
+            top: 0;
+        }
+        
+        .full-page-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .full-page-table tbody tr:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .full-page-summary {
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .summary-item {
+            text-align: center;
+        }
+        
+        .summary-label {
+            font-size: 0.9rem;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .summary-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .summary-value.gain {
+            color: var(--success-color);
+        }
+        
+        .summary-value.loss {
+            color: var(--danger-color);
+        }
+    </style>
+</head>
+<body>
+    <header class="animate__animated animate__fadeIn">
+        <div class="logo">
+            <i class="fas fa-gift"></i>
+            <h1>COZYGIFTZ</h1>
+        </div>
+        <h2>Transaction Tracker</h2>
+    </header>
+    
+    <main>
+        <section class="transaction-form animate__animated animate__fadeInUp">
+            <h3 class="form-title"><i class="fas fa-plus-circle"></i> New Transaction</h3>
+            <form id="transactionForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="transactionType">Transaction Type</label>
+                        <select id="transactionType" required>
+                            <option value="">-- Select Type --</option>
+                            <option value="gain">Gain (Income)</option>
+                            <option value="loss">Loss (Expense)</option>
+                            <option value="invest">Invest (Investment)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="reason">Reason / Description</label>
+                    <textarea id="reason" rows="2" required placeholder="Enter transaction reason or description..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="amount">Amount (₹)</label>
+                    <div class="amount-container">
+                        <span>₹</span>
+                        <input type="number" id="amount" min="0" step="0.01" required placeholder="0.00">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn" id="submitBtn">
+                        <i class="fas fa-save"></i> Save Transaction
+                    </button>
+                    <button type="reset" class="btn btn-reset">
+                        <i class="fas fa-undo"></i> Reset
+                    </button>
+                </div>
+            </form>
+        </section>
+        
+        <section class="transactions animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+            <div class="transactions-header">
+                <h3 class="transactions-title"><i class="fas fa-history"></i> All Transactions</h3>
+                <div class="header-buttons">
+                    <a href="scale.html" class="btn">
+                        <i class="fas fa-chart-line"></i> View Analysis
+                    </a>
+                    <button class="btn" id="viewAllBtn">
+                        <i class="fas fa-expand"></i> View All
+                    </button>
+                    <button class="btn" id="clearAllBtn">
+                        <i class="fas fa-trash"></i> Clear All
+                    </button>
+                </div>
+            </div>
+            <div class="transactions-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Reason</th>
+                            <th>Amount</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionsBody">
+                        <!-- Transactions will be dynamically added here -->
+                    </tbody>
+                </table>
+                <div id="emptyState" class="empty-state">
+                    <i class="fas fa-receipt"></i>
+                    <p>No transactions recorded yet. Add your first transaction above!</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationMessage"></span>
+    </div>
+    
+    <!-- Edit Transaction Modal -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> Edit Transaction</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="editForm">
+                <input type="hidden" id="editId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editDate">Date</label>
+                        <input type="date" id="editDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editType">Transaction Type</label>
+                        <select id="editType" required>
+                            <option value="">-- Select Type --</option>
+                            <option value="gain">Gain (Income)</option>
+                            <option value="loss">Loss (Expense)</option>
+                            <option value="invest">Invest (Investment)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="editReason">Reason / Description</label>
+                    <textarea id="editReason" rows="2" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editAmount">Amount (₹)</label>
+                    <div class="amount-container">
+                        <span>₹</span>
+                        <input type="number" id="editAmount" min="0" step="0.01" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-reset">Cancel</button> -->
+                    <button type="submit" class="btn">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Full Page View -->
+    <div class="full-page-view" id="fullPageView">
+        <div class="full-page-header">
+            <div class="full-page-title">
+                <i class="fas fa-list-alt"></i>
+                <h2>All Transactions</h2>
+            </div>
+            <button class="close-full-view" id="closeFullView">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="full-page-summary">
+            <div class="summary-item">
+                <div class="summary-label">Total Gain</div>
+                <div class="summary-value gain" id="totalGain">₹0.00</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Total Loss</div>
+                <div class="summary-value loss" id="totalLoss">₹0.00</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Net Balance</div>
+                <div class="summary-value" id="netBalance">₹0.00</div>
+            </div>
+        </div>
+        <table class="full-page-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Reason</th>
+                    <th>Amount</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="fullPageTransactionsBody">
+            </tbody>
+        </table>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 COZYGIFTZ. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set default date to today
+            document.getElementById('date').valueAsDate = new Date();
+            
+            // Initialize transactions from local storage
+            let transactions = JSON.parse(localStorage.getItem('cozyGiftzTransactions')) || [];
+            
+            // DOM elements
+            const transactionForm = document.getElementById('transactionForm');
+            const transactionsBody = document.getElementById('transactionsBody');
+            const emptyState = document.getElementById('emptyState');
+            const clearAllBtn = document.getElementById('clearAllBtn');
+            const notification = document.getElementById('notification');
+            const notificationMessage = document.getElementById('notificationMessage');
+            const editModal = document.getElementById('editModal');
+            const editForm = document.getElementById('editForm');
+            const fullPageView = document.getElementById('fullPageView');
+            const viewAllBtn = document.getElementById('viewAllBtn');
+            const closeFullView = document.getElementById('closeFullView');
+            
+            // Display transactions
+            function displayTransactions() {
+                if (transactions.length === 0) {
+                    emptyState.style.display = 'block';
+                    transactionsBody.style.display = 'none';
+                    return;
+                }
+                
+                emptyState.style.display = 'none';
+                transactionsBody.style.display = 'table-row-group';
+                transactionsBody.innerHTML = '';
+                
+                // Sort transactions by date (newest first)
+                transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                transactions.forEach((transaction, index) => {
+                    const row = document.createElement('tr');
+                    row.className = 'slide-in';
+                    row.style.animationDelay = `${index * 0.05}s`;
+                    
+                    const formattedDate = new Date(transaction.date).toLocaleDateString();
+                    const amountSign = transaction.type === 'gain' ? '+' : (transaction.type === 'invest' ? '±' : '-');
+                    const amountClass = transaction.type === 'gain' ? 'gain' : (transaction.type === 'invest' ? 'invest' : 'loss');
+                    const typeDisplay = transaction.type === 'gain' ? 'Gain' : (transaction.type === 'invest' ? 'Invest' : 'Loss');
+                    
+                    row.innerHTML = `
+                        <td>${formattedDate}</td>
+                        <td><span class="transaction-type type-${transaction.type}">${typeDisplay}</span></td>
+                        <td>${transaction.reason}</td>
+                        <td class="amount ${amountClass}">${amountSign}₹${transaction.amount.toFixed(2)}</td>
+                        <td>
+                            <button class="btn-icon edit-btn" data-id="${transaction.id}" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-icon delete-btn" data-id="${transaction.id}" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    
+                    transactionsBody.appendChild(row);
+                });
+                
+                // Add event listeners to the new buttons
+                attachButtonListeners();
+            }
+            
+            // Attach event listeners to edit and delete buttons
+            function attachButtonListeners() {
+                document.querySelectorAll('.edit-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'));
+                        editTransaction(id);
+                    });
+                });
+                
+                document.querySelectorAll('.delete-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'));
+                        deleteTransaction(id);
+                    });
+                });
+            }
+            
+            // Add new transaction
+            function addTransaction(e) {
+                e.preventDefault();
+                
+                const date = document.getElementById('date').value;
+                const type = document.getElementById('transactionType').value;
+                const reason = document.getElementById('reason').value;
+                const amount = parseFloat(document.getElementById('amount').value);
+                
+                if (!date || !type || !reason || isNaN(amount) || amount <= 0) {
+                    showNotification('Please fill all fields correctly', 'error');
+                    return;
+                }
+                
+                const newTransaction = {
+                    id: Date.now(),
+                    date,
+                    type,
+                    reason,
+                    amount
+                };
+                
+                transactions.push(newTransaction);
+                
+                // Save to localStorage
+                localStorage.setItem('cozyGiftzTransactions', JSON.stringify(transactions));
+                
+                // Reset form
+                transactionForm.reset();
+                document.getElementById('date').valueAsDate = new Date();
+                
+                // Display transactions
+                displayTransactions();
+                
+                // Show success notification
+                showNotification('Transaction added successfully!', 'success');
+            }
+            
+            // Edit transaction
+            function editTransaction(id) {
+                const transaction = transactions.find(t => t.id === id);
+                if (!transaction) return;
+                
+                document.getElementById('editId').value = transaction.id;
+                document.getElementById('editDate').value = transaction.date;
+                document.getElementById('editType').value = transaction.type;
+                document.getElementById('editReason').value = transaction.reason;
+                document.getElementById('editAmount').value = transaction.amount;
+                
+                editModal.style.display = 'flex';
+            }
+            
+            // Update transaction
+            function updateTransaction(e) {
+                e.preventDefault();
+                
+                const id = parseInt(document.getElementById('editId').value);
+                const date = document.getElementById('editDate').value;
+                const type = document.getElementById('editType').value;
+                const reason = document.getElementById('editReason').value;
+                const amount = parseFloat(document.getElementById('editAmount').value);
+                
+                if (!date || !type || !reason || isNaN(amount) || amount <= 0) {
+                    showNotification('Please fill all fields correctly', 'error');
+                    return;
+                }
+                
+                const index = transactions.findIndex(t => t.id === id);
+                if (index === -1) return;
+                
+                transactions[index] = {
+                    id,
+                    date,
+                    type,
+                    reason,
+                    amount
+                };
+                
+                localStorage.setItem('cozyGiftzTransactions', JSON.stringify(transactions));
+                displayTransactions();
+                closeModal();
+                showNotification('Transaction updated successfully!', 'success');
+            }
+            
+            // Delete transaction
+            function deleteTransaction(id) {
+                if (!confirm('Are you sure you want to delete this transaction?')) return;
+                
+                transactions = transactions.filter(t => t.id !== id);
+                localStorage.setItem('cozyGiftzTransactions', JSON.stringify(transactions));
+                displayTransactions();
+                showNotification('Transaction deleted successfully!', 'success');
+            }
+            
+            // Close modal
+            function closeModal() {
+                editModal.style.display = 'none';
+                editForm.reset(); // Reset the form when closing
+            }
+            
+            // Clear all transactions
+            function clearAllTransactions() {
+                if (transactions.length === 0) return;
+                
+                const password = prompt('Please enter the password to clear all transactions:');
+                if (password === '1784') {
+                    if (confirm('Are you sure you want to clear all transactions? This cannot be undone.')) {
+                        transactions = [];
+                        localStorage.setItem('cozyGiftzTransactions', JSON.stringify(transactions));
+                        displayTransactions();
+                        showNotification('All transactions cleared', 'success');
+                    }
+                } else {
+                    showNotification('Incorrect password. Action denied.', 'error');
+                }
+            }
+            
+            // Show notification
+            function showNotification(message, type) {
+                notification.className = 'notification';
+                notification.classList.add(`notification-${type}`);
+                notificationMessage.textContent = message;
+                
+                notification.classList.add('show');
+                notification.classList.add('bounce-in');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+            
+            // Event listeners
+            transactionForm.addEventListener('submit', addTransaction);
+            clearAllBtn.addEventListener('click', clearAllTransactions);
+            editForm.addEventListener('submit', updateTransaction);
+            viewAllBtn.addEventListener('click', showFullPageView);
+            closeFullView.addEventListener('click', hideFullPageView);
+            
+            // Close modal when clicking outside
+            editModal.addEventListener('click', function(e) {
+                if (e.target === editModal) {
+                    closeModal();
+                }
+            });
+            
+            // Close modal when pressing Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && editModal.style.display === 'flex') {
+                    closeModal();
+                }
+            });
+            
+            // Add event listeners for cancel and close buttons
+            document.querySelector('.close-modal').addEventListener('click', closeModal);
+            document.querySelector('.btn-reset').addEventListener('click', closeModal);
+            
+            // Animation for form fields focus
+            const formFields = document.querySelectorAll('input, select, textarea');
+            formFields.forEach(field => {
+                field.addEventListener('focus', function() {
+                    this.parentElement.classList.add('pulse');
+                });
+                
+                field.addEventListener('blur', function() {
+                    this.parentElement.classList.remove('pulse');
+                });
+            });
+            
+            // Initial display
+            displayTransactions();
+            
+            // Show full page view
+            function showFullPageView() {
+                fullPageView.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+                displayFullPageTransactions();
+            }
+            
+            // Hide full page view
+            function hideFullPageView() {
+                fullPageView.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+            
+            // Display transactions in full page view
+            function displayFullPageTransactions() {
+                const fullPageBody = document.getElementById('fullPageTransactionsBody');
+                fullPageBody.innerHTML = '';
+                
+                let totalGain = 0;
+                let totalLoss = 0;
+                
+                transactions.forEach(transaction => {
+                    const row = document.createElement('tr');
+                    const formattedDate = new Date(transaction.date).toLocaleDateString();
+                    const amountSign = transaction.type === 'gain' ? '+' : (transaction.type === 'invest' ? '±' : '-');
+                    const amountClass = transaction.type === 'gain' ? 'gain' : (transaction.type === 'invest' ? 'invest' : 'loss');
+                    const typeDisplay = transaction.type === 'gain' ? 'Gain' : (transaction.type === 'invest' ? 'Invest' : 'Loss');
+                    
+                    if (transaction.type === 'gain') {
+                        totalGain += transaction.amount;
+                    } else {
+                        totalLoss += transaction.amount;
+                    }
+                    
+                    row.innerHTML = `
+                        <td>${formattedDate}</td>
+                        <td><span class="transaction-type type-${transaction.type}">${typeDisplay}</span></td>
+                        <td>${transaction.reason}</td>
+                        <td class="amount ${amountClass}">${amountSign}₹${transaction.amount.toFixed(2)}</td>
+                        <td>
+                            <button class="btn-icon edit-btn" data-id="${transaction.id}" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-icon delete-btn" data-id="${transaction.id}" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    
+                    fullPageBody.appendChild(row);
+                });
+                
+                // Update summary
+                document.getElementById('totalGain').textContent = `₹${totalGain.toFixed(2)}`;
+                document.getElementById('totalLoss').textContent = `₹${totalLoss.toFixed(2)}`;
+                document.getElementById('netBalance').textContent = `₹${(totalGain - totalLoss).toFixed(2)}`;
+                
+                // Add event listeners to the new buttons
+                attachButtonListeners();
+            }
+            
+            // Close full page view when pressing Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && fullPageView.style.display === 'block') {
+                    hideFullPageView();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
